@@ -1,0 +1,7 @@
+greyfrut_module2.custom_form:
+  path: "/add-review"
+  defaults:
+    _form: '\Drupal\greyfrut_module2\Form\ReviewAddForm'
+    _title: "Add review"
+  requirements:
+    _permission: "access content"
