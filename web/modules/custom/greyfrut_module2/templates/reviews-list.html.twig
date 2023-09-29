@@ -1,0 +1,23 @@
+<div>
+  <ul class="reviews-list">
+    {% for row in rows %}
+      <li>
+        <article>
+          <div>
+            {{ row.avatar }}
+            {{ row.name }}
+            {{ row.created }}
+          </div>
+          <div>
+            {{ row.image }}
+            {{ row.review_text }}
+          </div>
+          <div>
+            {{ row.email }}
+            {{ row.phone_number }}
+          </div>
+        </article>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

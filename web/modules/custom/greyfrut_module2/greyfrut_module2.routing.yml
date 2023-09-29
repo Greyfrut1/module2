@@ -5,3 +5,11 @@ greyfrut_module2.custom_form:
     _title: "Add review"
   requirements:
     _permission: "access content"
+
+greyfrut_module2.entities:
+  path: "/reviews_list"
+  defaults:
+    _controller: '\Drupal\greyfrut_module2\Controller\ReviewsListController::buildList'
+    _title: "Reviews list"
+  requirements:
+    _permission: "access content"

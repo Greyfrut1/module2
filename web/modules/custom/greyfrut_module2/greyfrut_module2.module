@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_theme() to provide a theme for ReviewsListBuilder.
+ */
+function greyfrut_module2_theme($existing, $type, $theme, $path) {
+  return [
+    'reviews_list' => [
+      'variables' => [
+        'rows' => [],
+        'attributes' => [],
+      ],
+    ],
+  ];
+}

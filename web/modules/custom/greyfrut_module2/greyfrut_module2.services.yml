@@ -1,0 +1,5 @@
+services:
+  greyfrut_module2.list_builder:
+    class: Drupal\greyfrut_module2\ReviewsListBuilder
+    tags:
+      - { name: entity.list_builder }

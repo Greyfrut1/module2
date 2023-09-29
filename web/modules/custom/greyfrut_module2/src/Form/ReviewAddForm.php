@@ -72,7 +72,7 @@ class ReviewAddForm extends FormBase {
       '#type' => 'textarea',
       '#title' => $this->t('Your review'),
       '#required' => TRUE,
-      '#description' => $this->t('Max length: 50 characters'),
+      '#description' => $this->t('Max length: 500 characters'),
     ];
     $form['avatar'] = [
       '#type' => 'managed_file',

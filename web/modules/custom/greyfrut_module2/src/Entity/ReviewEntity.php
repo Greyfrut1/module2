@@ -10,12 +10,18 @@ use Drupal\Core\Field\BaseFieldDefinition;
 /**
  * Defines the review entity.
  *
- * @ingroup reivew
+ * @ingroup review
  *
  * @ContentEntityType(
  *   id = "review",
  *   label = @Translation("review"),
  *   base_table = "review",
+ *   handlers = {
+ *       "list_builder" = "Drupal\greyfrut_module2\ReviewsListBuilder",
+ *       "route_provider" = {
+ *         "html" = "Drupal\Core\Entity\Routing\DefaultHtmlRouteProvider",
+ *       },
+ *     },
  *   entity_keys = {
  *     "id" = "id",
  *     "created" = "created",
