@@ -27,13 +27,13 @@ class ReviewAddForm extends FormBase {
     $form['#suffix'] = '</div>';
     $form['name'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Your cat’s name:'),
+      '#title' => $this->t('Your cat’s name'),
       '#required' => TRUE,
       '#description' => $this->t('Min length: 2 characters. Max length: 32 characters'),
     ];
     $form['email'] = [
       '#type' => 'email',
-      '#title' => $this->t('Your email:'),
+      '#title' => $this->t('Your email'),
       '#required' => TRUE,
       '#description' => 'Email can only contain Latin letters, underscore, or hyphen.',
       '#prefix' => '<div id="email-validate-form-wrapper">', // Використовуйте відмінний від phone_number wrapper та id для повідомлень
@@ -52,7 +52,7 @@ class ReviewAddForm extends FormBase {
 
     $form['phone_number'] = [
       '#type' => 'tel',
-      '#title' => $this->t('Your phone number:'),
+      '#title' => $this->t('Your phone number'),
       '#required' => TRUE,
       '#prefix' => '<div id="phone-validate-form-wrapper">', // Використовуйте відмінний від email wrapper та id для повідомлень
       '#ajax' => [
@@ -66,6 +66,34 @@ class ReviewAddForm extends FormBase {
     $form['phone_validate_message'] = [
       '#markup' => '<div class="phone-validate-message"></div>',
       '#suffix' => '</div>',
+    ];
+
+    $form['review_text'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Your review'),
+      '#required' => TRUE,
+      '#description' => $this->t('Max length: 50 characters'),
+    ];
+    $form['avatar'] = [
+      '#type' => 'managed_file',
+      '#title' => $this->t('Your avatar'),
+      '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 2 mb.'),
+      '#upload_location' => 'public://',
+      '#upload_validators' => [
+        'file_validate_extensions' => ['jpg jpeg png'],
+        'file_validate_size' => [2100000],
+      ],
+    ];
+    $form['image'] = [
+      '#type' => 'managed_file',
+      '#required' => TRUE,
+      '#title' => $this->t('Image'),
+      '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 5 mb.'),
+      '#upload_location' => 'public://',
+      '#upload_validators' => [
+        'file_validate_extensions' => ['jpg jpeg png'],
+        'file_validate_size' => [5240000],
+      ],
     ];
 
     $form['submit'] = [
@@ -89,11 +117,17 @@ class ReviewAddForm extends FormBase {
     }
     $name = $form_state->getValue('name');
     $email = $form_state->getValue('email');
+    $review_text = $form_state->getValue('review_text');
     $phone_number = $form_state->getValue('phone_number');
+    $avatar_id = $form_state->getValue('avatar')[0];
+    $image_id = $form_state->getValue('image')[0];
     $entity = ReviewEntity::create();
     $entity->set('name', $name);
+    $entity->set('review_text', $review_text);
     $entity->set('email', $email);
     $entity->set('phone_number', $phone_number);
+    $entity->set('avatar', $avatar_id);
+    $entity->set('image', $image_id);
     $current_time = new DrupalDateTime('now');
     $entity->set('created', $current_time->getTimestamp());
     $entity->save();

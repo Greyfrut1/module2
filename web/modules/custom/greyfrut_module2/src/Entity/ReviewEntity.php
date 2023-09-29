@@ -61,6 +61,32 @@ class ReviewEntity extends ContentEntityBase implements ContentEntityInterface {
       ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => -2])
       ->setDisplayOptions("form", ["type" => "telephone_default", "weight" => -2]);
 
+    $fields["review_text"] = BaseFieldDefinition::create("string")
+      ->setLabel(t('Review text'))
+      ->setDescription(t("Max length 500"))
+      ->setSettings(["max_length" => 500, "text_processing" => 0])
+      ->setDefaultValue("")
+      ->setDisplayOptions("view", ["label" => "above", "type" => "textarea", "wegith" => -3])
+      ->setDisplayOptions("form", ["type" => "textarea_textfield", "wegith" => -3]);
+
+    $fields['avatar'] = BaseFieldDefinition::create('image')
+      ->setLabel(t('Avatar'))
+      ->setDescription(t('An image associated with the custom entity.'))
+      ->setRequired(TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'image_image',
+        'weight' => 0,
+      ]);
+
+    $fields['image'] = BaseFieldDefinition::create('image')
+      ->setLabel(t('Image'))
+      ->setDescription(t('An image associated with the custom entity.'))
+      ->setRequired(TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'image_image',
+        'weight' => 0,
+      ]);
+
 
     return $fields;
   }
