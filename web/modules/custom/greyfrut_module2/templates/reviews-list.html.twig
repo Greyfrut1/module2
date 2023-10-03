@@ -1,9 +1,9 @@
 <div>
   <ul class="reviews-list">
     {% for row in rows %}
-      <li>
+      <li class="reviews-list_item">
         <article>
-          <div>
+          <div class="reviews-list_item__block1">
             {{ row.avatar }}
             {{ row.name }}
             {{ row.created }}
@@ -13,11 +13,12 @@
                data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:400}">Delete</a>
             {% endif %}
           </div>
-          <div>
+          <div class="reviews-list_item__block2">
             {{ row.image }}
             {{ row.review_text }}
           </div>
-          <div>
+          <div class="reviews-list_item__block3">
+            {{ row.phone_number }}
             {{ row.email }}
           </div>
         </article>

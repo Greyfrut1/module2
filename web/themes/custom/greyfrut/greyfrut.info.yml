@@ -1,0 +1,10 @@
+name: 'Greyfrut theme'
+type: theme
+description: 'Custom theme base on olivero'
+core_version_requirement: ^10
+base theme: olivero
+package: Custom
+
+libraries:
+  - greyfrut/greyfrut_theme
+  - greyfrut/greyfrut_css
