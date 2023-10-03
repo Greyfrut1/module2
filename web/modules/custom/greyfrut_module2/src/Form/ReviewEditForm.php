@@ -8,47 +8,53 @@ use Drupal\greyfrut_module2\Entity\ReviewEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- *
+ * Provides a form for editing a review entity.
  */
 class ReviewEditForm extends FormBase {
 
   protected $entity;
 
   /**
+   * Constructor to set the review entity for editing.
    *
+   * @param \Drupal\greyfrut_module2\Entity\ReviewEntity $entity
+   *   The review entity to be edited.
    */
   public function __construct(ReviewEntity $entity) {
     $this->entity = $entity;
   }
 
   /**
-   *
+   * Factory method to create an instance of the form.
    */
   public static function create(ContainerInterface $container) {
-
+    // Load the review entity to be edited based on the route parameter 'review_id'.
     $route_parameters = \Drupal::routeMatch()->getParameters();
     $review_id = $route_parameters->get('review_id');
-
     $entity = \Drupal::entityTypeManager()->getStorage('review')->load($review_id);
 
     return new static($entity);
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function getFormId() {
     return 'review_id';
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
+    // Retrieve the review entity being edited.
     $review_entity = $this->entity;
+
+    // Add prefix and suffix div elements for the form.
     $form['#prefix'] = '<div id="review-form-wrapper">';
     $form['#suffix'] = '</div>';
+
+    // Form fields for editing review information.
     $form['name'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Your name'),
@@ -125,6 +131,7 @@ class ReviewEditForm extends FormBase {
       ],
     ];
 
+    // Submit button with AJAX callback.
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
@@ -140,24 +147,23 @@ class ReviewEditForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // Update the review entity with the edited information.
     $entity = $this->entity;
     $entity->set('name', $form_state->getValue('name'));
     $entity->set('email', $form_state->getValue('email'));
     $entity->set('image', $form_state->getValue('image'));
     $entity->set('avatar', $form_state->getValue('avatar'));
 
+    // Save the updated entity.
     $entity->save();
 
+    // Redirect to the entity listing page after saving.
     $form_state->setRedirect('greyfrut_module2.entities');
   }
 
   /**
-   *
+   * Validation function to check the length of the 'name' field.
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $name = $form_state->getValue('name');
@@ -168,7 +174,7 @@ class ReviewEditForm extends FormBase {
   }
 
   /**
-   *
+   * AJAX callback to validate the 'email' field.
    */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');

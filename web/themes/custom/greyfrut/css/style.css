@@ -46,3 +46,6 @@
 #content {
   display: block;
 }
+.ui-dialog-buttonset {
+  justify-content: space-around;
+}

@@ -14,7 +14,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *
  * @ContentEntityType(
  *   id = "review",
- *   label = @Translation("review"),
+ *   label = @Translation("Review"),
  *   base_table = "review",
  *   handlers = {
  *       "list_builder" = "Drupal\greyfrut_module2\ReviewsListBuilder",
@@ -32,34 +32,37 @@ use Drupal\Core\Field\BaseFieldDefinition;
 class ReviewEntity extends ContentEntityBase implements ContentEntityInterface {
 
   /**
-   *
+   * Defines the base fields for the ReviewEntity.
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
-
-    // Standard field, used as unique if primary index.
+    // Define the ID field for the entity.
     $fields['id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('ID'))
-      ->setDescription(t('Id of review entity'))
+      ->setDescription(t('ID of the review entity'))
       ->setReadOnly(TRUE);
 
+    // Define the created field for storing the entity's creation time.
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the entity was created.'));
 
+    // Define the 'name' field for the entity.
     $fields["name"] = BaseFieldDefinition::create("string")
       ->setLabel(t('Name'))
       ->setDescription(t("Min length: 2 characters. Max length: 100 characters"))
       ->setSettings(["max_length" => 100, "text_processing" => 0])
       ->setDefaultValue("")
-      ->setDisplayOptions("view", ["label" => "above", "type" => "string", "wegith" => -3])
-      ->setDisplayOptions("form", ["type" => "string_textfield", "wegith" => -3]);
+      ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => -3])
+      ->setDisplayOptions("form", ["type" => "string_textfield", "weight" => -3]);
 
+    // Define the 'email' field for the entity.
     $fields["email"] = BaseFieldDefinition::create("email")
       ->setLabel(t("Email"))
       ->setDescription(t("Email can only contain Latin letters, underscore, or hyphen."))
       ->setDefaultValue("")
-      ->setDisplayOptions("form", ["type" => "email_default", "wegith" => -3]);
+      ->setDisplayOptions("form", ["type" => "email_default", "weight" => -3]);
 
+    // Define the 'phone_number' field for the entity.
     $fields["phone_number"] = BaseFieldDefinition::create("telephone")
       ->setLabel(t("Phone Number"))
       ->setDescription(t("Phone number field"))
@@ -67,14 +70,16 @@ class ReviewEntity extends ContentEntityBase implements ContentEntityInterface {
       ->setDisplayOptions("view", ["label" => "above", "type" => "string", "weight" => -2])
       ->setDisplayOptions("form", ["type" => "telephone_default", "weight" => -2]);
 
+    // Define the 'review_text' field for the entity.
     $fields["review_text"] = BaseFieldDefinition::create("string")
       ->setLabel(t('Review text'))
       ->setDescription(t("Max length 500"))
       ->setSettings(["max_length" => 500, "text_processing" => 0])
       ->setDefaultValue("")
-      ->setDisplayOptions("view", ["label" => "above", "type" => "textarea", "wegith" => -3])
-      ->setDisplayOptions("form", ["type" => "textarea_textfield", "wegith" => -3]);
+      ->setDisplayOptions("view", ["label" => "above", "type" => "textarea", "weight" => -3])
+      ->setDisplayOptions("form", ["type" => "textarea_textfield", "weight" => -3]);
 
+    // Define the 'avatar' field for the entity, which is an image field.
     $fields['avatar'] = BaseFieldDefinition::create('image')
       ->setLabel(t('Avatar'))
       ->setDescription(t('An image associated with the custom entity.'))
@@ -84,6 +89,7 @@ class ReviewEntity extends ContentEntityBase implements ContentEntityInterface {
         'weight' => 0,
       ]);
 
+    // Define the 'image' field for the entity, which is another image field.
     $fields['image'] = BaseFieldDefinition::create('image')
       ->setLabel(t('Image'))
       ->setDescription(t('An image associated with the custom entity.'))
@@ -92,7 +98,6 @@ class ReviewEntity extends ContentEntityBase implements ContentEntityInterface {
         'type' => 'image_image',
         'weight' => 0,
       ]);
-
 
     return $fields;
   }
