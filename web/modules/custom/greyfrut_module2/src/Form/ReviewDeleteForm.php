@@ -2,15 +2,15 @@
 
 namespace Drupal\greyfrut_module2\Form;
 
-use Drupal\greyfrut_module2\Entity\ReviewEntity;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\greyfrut_module2\Entity\ReviewEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a confirmation form for deleting a cat entity.
+ * Provides a confirmation form for deleting a review entity.
  */
 class ReviewDeleteForm extends FormBase {
 
@@ -39,9 +39,9 @@ class ReviewDeleteForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['message'] = [
-      '#markup' => $this->t('Are you sure you want to delete the cat entity: %name?', ['%name' => $this->reviewEntity->label()]),
+      '#markup' => $this->t('Are you sure you want to delete the review: %name?', ['%name' => $this->reviewEntity->label()]),
     ];
-    $form['actions'] =[
+    $form['actions'] = [
       '#type' => 'actions',
     ];
     $form['actions']['yes'] = [
@@ -58,7 +58,6 @@ class ReviewDeleteForm extends FormBase {
       ],
       '#limit_validation_errors' => [],
     ];
-    $form['#attached']['library'][] = 'cats_module/cats_module_js';
 
     return $form;
   }

@@ -4,22 +4,24 @@
       <li class="reviews-list_item">
         <article>
           <div class="reviews-list_item__block1">
-            {{ row.avatar }}
-            {{ row.name }}
-            {{ row.created }}
+            <div>{{ row.avatar }}</div>
+            <span>{{ row.name }}</span>
+            <span>{{ row.created }}</span>
             {% if row.user == 'administrator' %}
-            <a href="{{ row.edit }}">Edit</a>
-            <a href="{{ row.delete }}" class="use-ajax button-delete delete-button-class"
-               data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:400}">Delete</a>
+              <div>
+                <a class="button" href="{{ row.edit }}">Edit</a>
+                <a href="{{ row.delete }}" class="button use-ajax button-delete delete-button-class"
+                   data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:400}">Delete</a>
+              </div>
             {% endif %}
           </div>
           <div class="reviews-list_item__block2">
             {{ row.image }}
-            {{ row.review_text }}
+            <p>{{ row.review_text }}</p>
           </div>
           <div class="reviews-list_item__block3">
-            {{ row.phone_number }}
-            {{ row.email }}
+            <span>Telephone: <a href="tel: {{ row.phone_number }}">{{ row.phone_number }}</a></span>
+            <span>Email: <a href="mailto: {{ row.email }}">{{ row.email }}</a></span>
           </div>
         </article>
       </li>

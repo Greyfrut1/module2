@@ -8,3 +8,4 @@ package: Custom
 libraries:
   - greyfrut/greyfrut_theme
   - greyfrut/greyfrut_css
+  - greyfrut/global-styling

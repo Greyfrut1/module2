@@ -2,9 +2,9 @@
 
 namespace Drupal\greyfrut_module2\Form;
 
-use Drupal\greyfrut_module2\Entity\ReviewEntity;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\greyfrut_module2\Entity\ReviewEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -62,10 +62,10 @@ class ReviewEditForm extends FormBase {
       '#required' => TRUE,
       '#default_value' => $review_entity->email->value,
       '#description' => 'Email can only contain Latin letters, underscore, or hyphen.',
-      '#prefix' => '<div id="email-validate-form-wrapper">', // Використовуйте відмінний від phone_number wrapper та id для повідомлень
+      '#prefix' => '<div id="email-validate-form-wrapper">',
       '#ajax' => [
         'callback' => '::validateEmailAjax',
-        'wrapper' => 'email-validate-form-wrapper', // Вказуємо той самий wrapper, що і для email
+        'wrapper' => 'email-validate-form-wrapper',
         'method' => 'replace',
         'event' => 'change',
       ],
@@ -75,16 +75,15 @@ class ReviewEditForm extends FormBase {
       '#suffix' => '</div>',
     ];
 
-
     $form['phone_number'] = [
       '#type' => 'tel',
       '#title' => $this->t('Your phone number'),
       '#required' => TRUE,
       '#default_value' => $review_entity->phone_number->value,
-      '#prefix' => '<div id="phone-validate-form-wrapper">', // Використовуйте відмінний від email wrapper та id для повідомлень
+      '#prefix' => '<div id="phone-validate-form-wrapper">',
       '#ajax' => [
         'callback' => '::validatePhoneAjax',
-        'wrapper' => 'phone-validate-form-wrapper', // Вказуємо той самий wrapper, що і для phone_number
+        'wrapper' => 'phone-validate-form-wrapper',
         'method' => 'replace',
         'event' => 'change',
       ],
@@ -161,9 +160,9 @@ class ReviewEditForm extends FormBase {
    *
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $cat_name = $form_state->getValue('name');
+    $name = $form_state->getValue('name');
 
-    if (strlen($cat_name) < 3 || strlen($cat_name) > 32) {
+    if (strlen($name) < 3 || strlen($name) > 32) {
       $form_state->setErrorByName('name', $this->t('Your name must be between 3 and 32 characters.'));
     }
   }

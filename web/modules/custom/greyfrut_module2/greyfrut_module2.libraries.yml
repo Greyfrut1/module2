@@ -1,0 +1,9 @@
+module_js:
+  version: 1.x
+  js:
+    js/cats_module.js: {}
+    js/bialog.ajax.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal.dialog
