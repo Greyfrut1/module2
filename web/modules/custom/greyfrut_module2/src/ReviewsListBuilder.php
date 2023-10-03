@@ -131,8 +131,8 @@ class ReviewsListBuilder extends EntityListBuilder {
    */
   public function load() {
     $query = $this->getStorage()->getQuery();
-    $query->sort('created', 'DESC');
     $query->accessCheck(FALSE);
+    $query->sort('created', 'DESC');
     $entity_ids = $query->execute();
     return $this->storage->loadMultiple($entity_ids);
   }
