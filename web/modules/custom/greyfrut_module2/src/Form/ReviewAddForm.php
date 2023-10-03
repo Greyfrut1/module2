@@ -27,7 +27,7 @@ class ReviewAddForm extends FormBase {
     $form['#suffix'] = '</div>';
     $form['name'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Your cat’s name'),
+      '#title' => $this->t('Your name'),
       '#required' => TRUE,
       '#description' => $this->t('Min length: 2 characters. Max length: 32 characters'),
     ];
@@ -72,6 +72,7 @@ class ReviewAddForm extends FormBase {
       '#type' => 'textarea',
       '#title' => $this->t('Your review'),
       '#required' => TRUE,
+      '#maxlength' => 500,
       '#description' => $this->t('Max length: 500 characters'),
     ];
     $form['avatar'] = [
@@ -98,7 +99,7 @@ class ReviewAddForm extends FormBase {
 
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Add cat'),
+      '#value' => $this->t('Add review'),
       '#ajax' => [
         'callback' => '::submitFormAjax',
         'wrapper' => 'review-form-wrapper',
@@ -139,7 +140,7 @@ class ReviewAddForm extends FormBase {
    *
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
+    return $form;
 
   }
 
@@ -151,7 +152,7 @@ class ReviewAddForm extends FormBase {
     $email = $form_state->getValue('email');
     $phone_number = $form_state->getValue('phone_number');
     if (strlen($name) < 3 || strlen($name) > 32) {
-      $form_state->setErrorByName('name', $this->t('Cat name must be between 3 and 32 characters.'));
+      $form_state->setErrorByName('name', $this->t('Your name must be between 3 and 32 characters.'));
     }
     if(!\Drupal::service('email.validator')->isValid($email)){
       $form_state->setErrorByName('email', $this->t('Email is not valid'));

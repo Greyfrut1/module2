@@ -42,6 +42,8 @@ class ReviewsListBuilder extends EntityListBuilder {
       '#attributes' => [],
     ];
 
+    $build['#cache']['max-age'] = 0;
+
     $current_user = \Drupal::currentUser();
 
     $user_roles = $current_user->getRoles();
@@ -108,6 +110,8 @@ class ReviewsListBuilder extends EntityListBuilder {
     $row['avatar'] = $avatar;
     $row['created'] = $created_date_formatted;
     $row['id'] = $entity->id();
+    $row['edit'] = Url::fromRoute('review_module.edit_form', ['review_id' => $entity->id()]);
+    $row['delete'] = Url::fromRoute('review_module.delete_form', ['review_id' => $entity->id()]);
 
     return $row + parent::buildRow($entity);
   }

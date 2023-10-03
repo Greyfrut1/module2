@@ -13,3 +13,19 @@ greyfrut_module2.entities:
     _title: "Reviews list"
   requirements:
     _permission: "access content"
+
+review_module.edit_form:
+  path: '/review/{review_id}/edit'
+  defaults:
+    _form: '\Drupal\greyfrut_module2\Form\ReviewEditForm'
+    _title: 'Edit review'
+  requirements:
+    _permission: 'administer site configuration'
+
+review_module.delete_form:
+  path: '/review/{review_id}/delete'
+  defaults:
+    _form: '\Drupal\greyfrut_module2\Form\ReviewDeleteForm'
+    _title: 'Delete review'
+  requirements:
+    _permission: 'administer site configuration'

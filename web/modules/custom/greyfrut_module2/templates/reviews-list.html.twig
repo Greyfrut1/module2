@@ -7,6 +7,11 @@
             {{ row.avatar }}
             {{ row.name }}
             {{ row.created }}
+            {% if row.user == 'administrator' %}
+            <a href="{{ row.edit }}">Edit</a>
+            <a href="{{ row.delete }}" class="use-ajax button-delete delete-button-class"
+               data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:400}">Delete</a>
+            {% endif %}
           </div>
           <div>
             {{ row.image }}
@@ -14,7 +19,6 @@
           </div>
           <div>
             {{ row.email }}
-            {{ row.phone_number }}
           </div>
         </article>
       </li>
