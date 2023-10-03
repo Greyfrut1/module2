@@ -116,7 +116,6 @@ class ReviewEditForm extends FormBase {
     ];
     $form['image'] = [
       '#type' => 'managed_file',
-      '#required' => TRUE,
       '#title' => $this->t('Image'),
       '#default_value' => [$this->entity->image->target_id],
       '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 5 mb.'),

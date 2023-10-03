@@ -73,22 +73,32 @@ class ReviewsListBuilder extends EntityListBuilder {
     $name = $entity->get('name')->value;
 
     $image_url = '';
+    $image = null;
+    $file = '';
     if ($image_id) {
       $file = \Drupal::entityTypeManager()->getStorage('file')->load($image_id);
+      $image = [
+        '#theme' => 'image_style',
+        '#style_name' => 'thumbnail',
+        '#uri' => $file->getFileUri(),
+      ];
     }
-    $image = [
-      '#theme' => 'image_style',
-      '#style_name' => 'thumbnail',
-      '#uri' => $file->getFileUri(),
-    ];
+    $avatar = null;
     if ($avatar_id) {
       $file = \Drupal::entityTypeManager()->getStorage('file')->load($avatar_id);
+      $avatar = [
+        '#theme' => 'image_style',
+        '#style_name' => 'thumbnail',
+        '#uri' => $file->getFileUri(),
+      ];
+    }else{
+      $avatar = [
+        '#theme' => 'image_style',
+        '#style_name' => 'thumbnail',
+        '#uri' => 'public://defalt_avatar.png',
+      ];
     }
-    $avatar = [
-      '#theme' => 'image_style',
-      '#style_name' => 'thumbnail',
-      '#uri' => $file->getFileUri(),
-    ];
+
 
     $created_timestamp = $entity->get('created')->value;
     $created_date = DrupalDateTime::createFromTimestamp($created_timestamp);
