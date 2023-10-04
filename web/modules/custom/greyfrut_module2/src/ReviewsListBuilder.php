@@ -10,21 +10,21 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a list builder for the review entities.
+ * {@inheritdoc}
  */
 class ReviewsListBuilder extends EntityListBuilder {
 
   protected $formBuilder;
 
   /**
-   * Create an instance of the list builder.
+   * {@inheritdoc}
    */
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
     return parent::createInstance($container, $entity_type);
   }
 
   /**
-   * Render the list of review entities.
+   * {@inheritdoc}
    */
   public function render() {
     // Load the review entities.
@@ -64,15 +64,9 @@ class ReviewsListBuilder extends EntityListBuilder {
     return $build;
   }
 
-  /**
-   * Build the header for the review list.
-   */
-  public function buildHeader() {
-    // You can define the table header here if needed.
-  }
 
   /**
-   * Build a row for a review entity.
+   * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
     $image_id = $entity->get('image')->target_id;
@@ -142,7 +136,7 @@ class ReviewsListBuilder extends EntityListBuilder {
   }
 
   /**
-   * Load and return review entities.
+   * {@inheritdoc}
    */
   public function load() {
     $query = $this->getStorage()->getQuery();

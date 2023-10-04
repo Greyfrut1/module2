@@ -108,28 +108,57 @@ class ReviewEditForm extends FormBase {
       '#default_value' => $review_entity->review_text->value,
       '#description' => $this->t('Max length: 500 characters'),
     ];
-    $form['avatar'] = [
-      '#type' => 'managed_file',
-      '#title' => $this->t('Your avatar'),
-      '#default_value' => [$this->entity->avatar->target_id],
-      '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 2 mb.'),
-      '#upload_location' => 'public://',
-      '#upload_validators' => [
-        'file_validate_extensions' => ['jpg jpeg png'],
-        'file_validate_size' => [2100000],
-      ],
-    ];
-    $form['image'] = [
-      '#type' => 'managed_file',
-      '#title' => $this->t('Image'),
-      '#default_value' => [$this->entity->image->target_id],
-      '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 5 mb.'),
-      '#upload_location' => 'public://',
-      '#upload_validators' => [
-        'file_validate_extensions' => ['jpg jpeg png'],
-        'file_validate_size' => [5240000],
-      ],
-    ];
+    if ($this->entity->avatar->target_id) {
+      $form['avatar'] = [
+        '#type' => 'managed_file',
+        '#title' => $this->t('Your avatar'),
+        '#default_value' => [$this->entity->avatar->target_id],
+        '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 2 mb.'),
+        '#upload_location' => 'public://',
+        '#upload_validators' => [
+          'file_validate_extensions' => ['jpg jpeg png'],
+          'file_validate_size' => [2100000],
+        ],
+      ];
+    }
+    else {
+      $form['avatar'] = [
+        '#type' => 'managed_file',
+        '#title' => $this->t('Your avatar'),
+        '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 2 mb.'),
+        '#upload_location' => 'public://',
+        '#upload_validators' => [
+          'file_validate_extensions' => ['jpg jpeg png'],
+          'file_validate_size' => [2100000],
+        ],
+      ];
+    }
+
+    if ($this->entity->image->target_id) {
+      $form['image'] = [
+        '#type' => 'managed_file',
+        '#title' => $this->t('Image'),
+        '#default_value' => [$this->entity->image->target_id],
+        '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 5 mb.'),
+        '#upload_location' => 'public://',
+        '#upload_validators' => [
+          'file_validate_extensions' => ['jpg jpeg png'],
+          'file_validate_size' => [5240000],
+        ],
+      ];
+    }
+    else {
+      $form['image'] = [
+        '#type' => 'managed_file',
+        '#title' => $this->t('Image'),
+        '#description' => $this->t('Choose an image file to upload (jpeg, jpg, png formats only). Max size 5 mb.'),
+        '#upload_location' => 'public://',
+        '#upload_validators' => [
+          'file_validate_extensions' => ['jpg jpeg png'],
+          'file_validate_size' => [5240000],
+        ],
+      ];
+    }
 
     // Submit button with AJAX callback.
     $form['submit'] = [
@@ -163,7 +192,7 @@ class ReviewEditForm extends FormBase {
   }
 
   /**
-   * Validation function to check the length of the 'name' field.
+   * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $name = $form_state->getValue('name');
@@ -174,7 +203,7 @@ class ReviewEditForm extends FormBase {
   }
 
   /**
-   * AJAX callback to validate the 'email' field.
+   * {@inheritdoc}
    */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');

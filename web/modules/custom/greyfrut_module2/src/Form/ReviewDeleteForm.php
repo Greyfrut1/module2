@@ -67,7 +67,7 @@ class ReviewDeleteForm extends FormBase {
   }
 
   /**
-   * Callback function to close the modal dialog when 'No' button is clicked.
+   * {@inheritdoc}
    */
   public function closeModal(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
@@ -76,9 +76,10 @@ class ReviewDeleteForm extends FormBase {
   }
 
   /**
-   * Factory method to create an instance of the form.
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
+
     // Load the review entity to be deleted based on the route parameter 'review_id'.
     $route_match = \Drupal::routeMatch();
     $review_id = $route_match->getParameter('review_id');
@@ -88,7 +89,7 @@ class ReviewDeleteForm extends FormBase {
   }
 
   /**
-   * Callback function to delete the review entity via AJAX.
+   * {@inheritdoc}
    */
   public function submitFormAjax(array &$form, FormStateInterface $form_state) {
     // Delete the review entity.

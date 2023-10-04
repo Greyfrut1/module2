@@ -67,6 +67,7 @@ class ReviewAddForm extends FormBase {
         'event' => 'change',
       ],
     ];
+
     $form['phone_validate_message'] = [
       '#markup' => '<div class="phone-validate-message"></div>',
       '#suffix' => '</div>',
@@ -188,10 +189,12 @@ class ReviewAddForm extends FormBase {
   }
 
   /**
-   * Custom validation callback for 'email' field using AJAX.
+   * {@inheritdoc}
    */
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
+
+    // Check if 'email' is a valid email address.
     if (!\Drupal::service('email.validator')->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-validate-message">' . $this->t('Email is not valid.') . '</div>';
@@ -204,10 +207,12 @@ class ReviewAddForm extends FormBase {
   }
 
   /**
-   * Custom validation callback for 'phone_number' field using AJAX.
+   * {@inheritdoc}
    */
   public function validatePhoneAjax(array &$form, FormStateInterface $form_state) {
     $phone_number = $form_state->getValue('phone_number');
+
+    // Check if 'phone_number' is a valid phone number format.
     if ($this->isValidPhoneNumber($phone_number)) {
       $form['phone_number']['#attributes']['class'][] = '';
       $form['phone_validate_message']['#markup'] = '';
@@ -221,13 +226,17 @@ class ReviewAddForm extends FormBase {
   }
 
   /**
-   * Custom function to validate the phone number format.
+   * {@inheritdoc}
    */
   private function isValidPhoneNumber($phone_number) {
     $phone_number = preg_replace('/[\s\(\)-]/', '', $phone_number);
+
+    // Check if 'phone_number' matches the required format.
     if (!preg_match('/^(?:\+380|380|0)\d{9}$/', $phone_number)) {
       return FALSE;
     }
+
     return TRUE;
   }
+
 }
