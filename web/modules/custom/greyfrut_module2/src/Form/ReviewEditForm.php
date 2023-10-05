@@ -8,27 +8,21 @@ use Drupal\greyfrut_module2\Entity\ReviewEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a form for editing a review entity.
- */
+   * {@inheritdoc}
+   */
 class ReviewEditForm extends FormBase {
 
   protected $entity;
 
-  /**
-   * Constructor to set the review entity for editing.
-   *
-   * @param \Drupal\greyfrut_module2\Entity\ReviewEntity $entity
-   *   The review entity to be edited.
-   */
+  
   public function __construct(ReviewEntity $entity) {
     $this->entity = $entity;
   }
 
   /**
-   * Factory method to create an instance of the form.
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    // Load the review entity to be edited based on the route parameter 'review_id'.
     $route_parameters = \Drupal::routeMatch()->getParameters();
     $review_id = $route_parameters->get('review_id');
     $entity = \Drupal::entityTypeManager()->getStorage('review')->load($review_id);
@@ -164,10 +158,6 @@ class ReviewEditForm extends FormBase {
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
-      '#ajax' => [
-        'callback' => '::submitFormAjax',
-        'wrapper' => 'review-form-wrapper',
-      ],
     ];
 
     return $form;
@@ -218,6 +208,35 @@ class ReviewEditForm extends FormBase {
     }
 
     return $form['email'];
+  }
+  public function validatePhoneAjax(array &$form, FormStateInterface $form_state) {
+    $phone_number = $form_state->getValue('phone_number');
+
+    // Check if 'phone_number' is a valid phone number format.
+    if ($this->isValidPhoneNumber($phone_number)) {
+      $form['phone_number']['#attributes']['class'][] = '';
+      $form['phone_validate_message']['#markup'] = '';
+    }
+    else {
+      $form['phone_number']['#attributes']['class'][] = 'error';
+      $form['phone_validate_message']['#markup'] = '<div class="phone-validate-message">' . $this->t('Phone number is not valid.') . '</div>';
+    }
+
+    return [$form['phone_number'], $form['phone_validate_message']];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  private function isValidPhoneNumber($phone_number) {
+    $phone_number = preg_replace('/[\s\(\)-]/', '', $phone_number);
+
+    // Check if 'phone_number' matches the required format.
+    if (!preg_match('/^(?:\+380|380|0)\d{9}$/', $phone_number)) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
 }

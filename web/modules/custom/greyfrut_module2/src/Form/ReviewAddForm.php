@@ -150,7 +150,6 @@ class ReviewAddForm extends FormBase {
 
     // Save the entity.
     $entity->save();
-
     return $form;
   }
 
@@ -160,7 +159,6 @@ class ReviewAddForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Handle form submission if needed.
     // In this case, it returns the form itself.
-    return $form;
   }
 
   /**
