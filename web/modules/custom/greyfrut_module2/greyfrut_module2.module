@@ -5,11 +5,16 @@
  */
 function greyfrut_module2_theme($existing, $type, $theme, $path) {
   return [
-    'reviews_list' => [ // Theme hook for the reviews list.
+    'reviews_list' => [
       'variables' => [
-        'rows' => [],       // Variable for the rows of the reviews list.
-        'attributes' => [], // Variable for additional attributes of the reviews list.
+        'rows' => [],
+        'attributes' => [],
       ],
     ],
   ];
 }
+
+
+
+
+

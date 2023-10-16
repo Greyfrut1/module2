@@ -2,15 +2,43 @@
 
 namespace Drupal\greyfrut_module2\Form;
 
+use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\greyfrut_module2\Entity\ReviewEntity;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines the form for adding reviews.
  */
 class ReviewAddForm extends FormBase {
+
+  /**
+   * The entity interface.
+   *
+   * @var \Drupal\Component\Utility\EmailValidatorInterface
+   */
+  protected $emailValidator;
+
+  /**
+   * Constructor to set the review entity for deletion.
+   *
+   * @param \Drupal\Component\Utility\EmailValidatorInterface $emailValidator
+   *   The email validator service.
+   */
+  public function __construct(EmailValidatorInterface $emailValidator) {
+    $this->emailValidator = $emailValidator;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('email.validator')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -176,7 +204,7 @@ class ReviewAddForm extends FormBase {
     }
 
     // Check if 'email' is a valid email address.
-    if (!\Drupal::service('email.validator')->isValid($email)) {
+    if (!$this->emailValidator->isValid($email)) {
       $form_state->setErrorByName('email', $this->t('Email is not valid'));
     }
 
@@ -193,7 +221,7 @@ class ReviewAddForm extends FormBase {
     $email = $form_state->getValue('email');
 
     // Check if 'email' is a valid email address.
-    if (!\Drupal::service('email.validator')->isValid($email)) {
+    if (!$this->emailValidator->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-validate-message">' . $this->t('Email is not valid.') . '</div>';
     }

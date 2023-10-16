@@ -2,32 +2,58 @@
 
 namespace Drupal\greyfrut_module2\Form;
 
+use Drupal\Component\Utility\EmailValidatorInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\greyfrut_module2\Entity\ReviewEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
-   * {@inheritdoc}
-   */
+ * {@inheritdoc}
+ */
 class ReviewEditForm extends FormBase {
 
+  /**
+   * The entity interface.
+   *
+   * @var \Drupal\greyfrut_module2\Entity\ReviewEntity
+   */
   protected $entity;
 
-  
-  public function __construct(ReviewEntity $entity) {
+  /**
+   * The email validator service.
+   *
+   * @var \Drupal\Component\Utility\EmailValidatorInterface
+   */
+  protected $emailValidator;
+
+  /**
+   * Constructs a ReviewsEntityEditForm object.
+   *
+   * @param \Drupal\greyfrut_module2\Entity\ReviewEntity $entity
+   *   The entity.
+   * @param \Drupal\Component\Utility\EmailValidatorInterface $emailValidator
+   *   The email validator service.
+   */
+  public function __construct(ReviewEntity $entity, EmailValidatorInterface $emailValidator) {
     $this->entity = $entity;
+    $this->emailValidator = $emailValidator;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $route_parameters = \Drupal::routeMatch()->getParameters();
+    $routeMatch = $container->get('current_route_match');
+    $route_parameters = $routeMatch->getParameters();
     $review_id = $route_parameters->get('review_id');
-    $entity = \Drupal::entityTypeManager()->getStorage('review')->load($review_id);
-
-    return new static($entity);
+    $entity = $container->get('entity_type.manager')->getStorage('review')->load($review_id);
+    if (!$entity) {
+      throw new NotFoundHttpException();
+    }
+    $emailValidator = $container->get('email.validator');
+    return new static($entity, $emailValidator);
   }
 
   /**
@@ -198,7 +224,7 @@ class ReviewEditForm extends FormBase {
   public function validateEmailAjax(array &$form, FormStateInterface $form_state) {
     $email = $form_state->getValue('email');
 
-    if (!\Drupal::service('email.validator')->isValid($email)) {
+    if (!$this->emailValidator->isValid($email)) {
       $form['email']['#attributes']['class'][] = 'error';
       $form['email_validate_message']['#markup'] = '<div class="email-valudate-message">' . $this->t('Email is not valid.') . '</div>';
     }
@@ -209,6 +235,10 @@ class ReviewEditForm extends FormBase {
 
     return $form['email'];
   }
+
+  /**
+   * Validates the phone_number field using Ajax.
+   */
   public function validatePhoneAjax(array &$form, FormStateInterface $form_state) {
     $phone_number = $form_state->getValue('phone_number');
 

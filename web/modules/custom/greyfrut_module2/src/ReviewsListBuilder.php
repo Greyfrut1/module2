@@ -6,21 +6,72 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * {@inheritdoc}
  */
 class ReviewsListBuilder extends EntityListBuilder {
 
-  protected $formBuilder;
+  /**
+   * The current user.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
+   * The entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The request stack service.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * Constructs a new ReviewEntityListBuilder object.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type.
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   The request stack service.
+   */
+  public function __construct(
+    EntityTypeInterface $entity_type,
+    AccountProxyInterface $current_user,
+    EntityTypeManagerInterface $entityTypeManager,
+    RequestStack $requestStack
+  ) {
+    parent::__construct($entity_type, $entityTypeManager->getStorage('review'));
+    $this->currentUser = $current_user;
+    $this->entityTypeManager = $entityTypeManager;
+    $this->requestStack = $requestStack;
+  }
 
   /**
    * {@inheritdoc}
    */
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type) {
-    return parent::createInstance($container, $entity_type);
+    return new static(
+      $entity_type,
+      $container->get('current_user'),
+      $container->get('entity_type.manager'),
+      $container->get('request_stack')
+    );
   }
 
   /**
@@ -49,7 +100,7 @@ class ReviewsListBuilder extends EntityListBuilder {
     $build['#cache']['max-age'] = 0;
 
     // Get the current user's roles.
-    $current_user = \Drupal::currentUser();
+    $current_user = $this->currentUser;
     $user_roles = $current_user->getRoles();
     $second_role = '';
 
@@ -63,7 +114,6 @@ class ReviewsListBuilder extends EntityListBuilder {
 
     return $build;
   }
-
 
   /**
    * {@inheritdoc}
@@ -79,7 +129,7 @@ class ReviewsListBuilder extends EntityListBuilder {
 
     // Load the image file for the review.
     if ($image_id) {
-      $file = \Drupal::entityTypeManager()->getStorage('file')->load($image_id);
+      $file = $this->entityTypeManager->getStorage('file')->load($image_id);
       $image = [
         '#theme' => 'image_style',
         '#style_name' => 'medium',
@@ -91,17 +141,18 @@ class ReviewsListBuilder extends EntityListBuilder {
 
     // Load the avatar image file for the review.
     if ($avatar_id) {
-      $file = \Drupal::entityTypeManager()->getStorage('file')->load($avatar_id);
+      $file = $this->entityTypeManager->getStorage('file')->load($avatar_id);
       $avatar = [
         '#theme' => 'image_style',
         '#style_name' => 'thumbnail',
         '#uri' => $file->getFileUri(),
       ];
-    } else {
+    }
+    else {
       $avatar = [
         '#theme' => 'image_style',
         '#style_name' => 'thumbnail',
-        '#uri' => 'public://defalt_avatar.png', // Typo fixed: 'defalt_avatar.png' -> 'default_avatar.png'
+        '#uri' => 'public://defalt_avatar.png',
       ];
     }
 
@@ -110,7 +161,7 @@ class ReviewsListBuilder extends EntityListBuilder {
     $created_date_formatted = $created_date->format('m/d/Y H:i:s');
 
     // Get the current user's roles.
-    $current_user = \Drupal::currentUser();
+    $current_user = $this->currentUser;
     $user_roles = $current_user->getRoles();
     $second_role = '';
 
@@ -139,10 +190,12 @@ class ReviewsListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function load() {
-    $query = $this->getStorage()->getQuery();
+    $entity_type_id = 'review';
+    $query = $this->entityTypeManager->getStorage($entity_type_id)->getQuery();
     $query->accessCheck(FALSE);
     $query->sort('created', 'DESC');
     $entity_ids = $query->execute();
     return $this->storage->loadMultiple($entity_ids);
   }
+
 }
