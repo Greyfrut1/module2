@@ -204,7 +204,7 @@ class ReviewEditForm extends FormBase {
     $entity->save();
 
     // Redirect to the entity listing page after saving.
-    $form_state->setRedirect('greyfrut_module2.entities');
+    $form_state->setRedirect('entity.review.collection');
   }
 
   /**
