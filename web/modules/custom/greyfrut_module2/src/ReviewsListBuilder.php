@@ -121,9 +121,6 @@ class ReviewsListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     $image_id = $entity->get('image')->target_id;
     $avatar_id = $entity->get('avatar')->target_id;
-    $name = $entity->get('name')->value;
-
-    $image_url = '';
     $image = NULL;
     $file = '';
 

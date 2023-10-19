@@ -27,6 +27,9 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *     "created" = "created",
  *   },
  *   admin_permission = "administer my awesome entities",
+ *   links = {
+ *      "collection" = "/review/reviews_list",
+ *    },
  * )
  */
 class ReviewEntity extends ContentEntityBase implements ContentEntityInterface {

@@ -97,7 +97,7 @@ class ReviewDeleteForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
 
-    // Load the review entity to be deleted based on the route parameter 'review_id'.
+    // Load the review using 'review_id' route param for deletion.
     $routeMatch = $container->get('current_route_match');
     $route_parameters = $routeMatch->getParameters();
     $review_id = $route_parameters->get('review_id');
@@ -131,7 +131,7 @@ class ReviewDeleteForm extends FormBase {
     $this->reviewEntity->delete();
 
     // Redirect to the entity listing page after deletion.
-    $form_state->setRedirect('greyfrut_module2.entities');
+    $form_state->setRedirect('entity.review.collection');
   }
 
 }
